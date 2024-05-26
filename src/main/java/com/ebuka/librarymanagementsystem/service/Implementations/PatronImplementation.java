@@ -14,11 +14,26 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+/**
+ * Service responsible for managing patron-related operations.
+ * Implements the PatronService interface to handle patron retrieval, updating, and deletion.
+ *
+ * This service provides methods to fetch, update, and delete patron information. It interacts with
+ * a repository to manage the underlying data and logs operations for monitoring purposes.
+ *
+ * Author: Chukwuebuka
+ */
 @Service
 @RequiredArgsConstructor
 public class PatronImplementation implements PatronService {
     private static final Logger logger = LoggerFactory.getLogger(PatronService.class);
     private final PatronRepository repository;
+
+    /**
+     * Retrieves all patrons from the library system.
+     *
+     * @return List of all patrons
+     */
     @Override
     public List<Patron> getAllPatron(){
         try {
@@ -31,12 +46,26 @@ public class PatronImplementation implements PatronService {
         }
     }
 
+
+    /**
+     * Retrieves a patron by their ID.
+     *
+     * @param id Long representing the patron ID
+     * @return PatronResponse containing patron details
+     */
     @Override
     public PatronResponse getPatronById(Long id) {
         Patron patron = findPatronById(id);
         return new PatronResponse(patron.getId(), patron.getFullName(), patron.getEmail(), patron.getAddress(), patron.getPhone());
     }
 
+    /**
+     * Updates the information of an existing patron.
+     *
+     * @param id Long representing the patron ID
+     * @param request PatronUpdateRequest object containing updated patron details
+     * @return PatronResponse with updated patron details
+     */
     @Override
     public PatronResponse updatePatronInfo(Long id, PatronUpdateRequest request) {
         Patron patron = findPatronById(id);
@@ -61,6 +90,12 @@ public class PatronImplementation implements PatronService {
         return mapPatronToPatronResponse(updatedPatron);
     }
 
+    /**
+     * Deletes a patron by their ID.
+     *
+     * @param id Long representing the patron ID
+     * @return String indicating the status of the deletion
+     */
     @Override
     public String deletePatronById(Long id) {
         try {
@@ -74,9 +109,23 @@ public class PatronImplementation implements PatronService {
 
     }
 
+    /**
+     * Maps a Patron object to a PatronResponse object.
+     *
+     * @param patron Patron object to be mapped
+     * @return PatronResponse containing patron details
+     */
     private PatronResponse mapPatronToPatronResponse(Patron patron) {
         return new PatronResponse(patron.getId(), patron.getFullName(), patron.getEmail(), patron.getAddress(), patron.getPhone());
     }
+
+
+    /**
+     * Finds a patron by their ID.
+     *
+     * @param id Long representing the patron ID
+     * @return Patron object if found
+     */
     private Patron findPatronById(Long id) {
         return repository.findById(id)
                 .orElseThrow(() -> new LibraryManagementException(ErrorStatus.PATRON_NOT_FOUND_ERROR, "Patron not found"));

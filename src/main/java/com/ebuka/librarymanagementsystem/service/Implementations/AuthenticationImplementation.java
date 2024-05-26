@@ -18,7 +18,16 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-
+/**
+ * Service responsible for handling user sign-up and sign-in operations.
+ * Implements methods for registering patrons and administrators, as well as authenticating users.
+ *
+ * This service ensures that email addresses are unique for each user and manages user authentication
+ * by generating JWT tokens upon successful sign-in. It also provides methods for setting up user details
+ * during registration.
+ *
+ * Author: Chukwuebuka
+ */
 
 @Slf4j
 @Service
@@ -30,6 +39,12 @@ public class AuthenticationImplementation implements AuthenticationService {
     private final JwtUtils jwtUtils;
 
 
+    /**
+     * Signs up a new patron.
+     *
+     * @param signUpRequest SignUpRequest object containing patron sign-up details
+     * @return Patron object representing the newly registered patron
+     */
     @Override
     public Patron signUp(SignUpRequest signUpRequest) {
         Patron user = patronRepository.findByEmail(signUpRequest.getEmail());
@@ -41,6 +56,13 @@ public class AuthenticationImplementation implements AuthenticationService {
         return patron;
     }
 
+
+    /**
+     * Signs up a new administrator.
+     *
+     * @param signUpRequest SignUpRequest object containing admin sign-up details
+     * @return Patron object representing the newly registered administrator
+     */
     @Override
     public Patron signUpAdmin(SignUpRequest signUpRequest) {
         Patron admin = patronRepository.findByEmail(signUpRequest.getEmail());
@@ -52,6 +74,12 @@ public class AuthenticationImplementation implements AuthenticationService {
         return patron;
     }
 
+    /**
+     * Signs in a user.
+     *
+     * @param request AuthenticationRequest object containing sign-in details
+     * @return AuthenticationResponse containing the JWT token and sign-in status
+     */
     @Override
     public AuthenticationResponse signIn(AuthenticationRequest request) {
         var user = patronRepository.findPatronByEmail(request.getEmail())
@@ -71,6 +99,13 @@ public class AuthenticationImplementation implements AuthenticationService {
     }
 
 
+
+    /**
+     * Sets up a new patron's details during registration.
+     *
+     * @param request SignUpRequest object containing patron sign-up details
+     * @return Patron object representing the newly registered patron
+     */
     private Patron setPatron(SignUpRequest request){
         Patron patron = new Patron();
 
@@ -83,6 +118,12 @@ public class AuthenticationImplementation implements AuthenticationService {
 
         return patron;
     }
+    /**
+     * Sets up a new administrator's details during registration.
+     *
+     * @param request SignUpRequest object containing admin sign-up details
+     * @return Patron object representing the newly registered administrator
+     */
     private Patron setAdmin(SignUpRequest request){
         Patron patron = new Patron();
 

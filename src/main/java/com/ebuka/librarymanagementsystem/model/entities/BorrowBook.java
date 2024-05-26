@@ -10,6 +10,15 @@ import org.springframework.data.annotation.CreatedDate;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
+/**
+ * Entity representing a record of a borrowed book in the library system.
+ *
+ * This class is an entity that maps to the "books_borrowed" table in the database.
+ * It contains information about the borrowing and returning of books by patrons.
+ *
+ * Author: Chukwuebuka
+ */
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -35,7 +44,6 @@ public class BorrowBook implements Serializable {
     @JoinColumn(name = "book_id")
     private Book book;
 
-    //private Long patron;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "patron_id", nullable = false )
